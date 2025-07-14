@@ -91,8 +91,109 @@
 
     const contenedor = document.getElementById('contenedor');
 
-    // Inserta aquí tu array "malla" con todos los ciclos y cursos (omitido por longitud)
-    // ...
+    const malla = [
+  {
+    ciclo: 'Ciclo 1',
+    cursos: [
+      { nombre: 'Complementos de matemática', creditos: 5 },
+      { nombre: 'Desarrollo de Talento', creditos: 2 },
+      { nombre: 'Comunicac. Y Estudios sociales', creditos: 2 },
+      { nombre: 'Ciudadanía Global', creditos: 2 },
+      { nombre: 'Comunicación 1', creditos: 5 },
+      { nombre: 'Tll. De Com. Y Convergencia Digital', creditos: 4 },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 2',
+    cursos: [
+      { nombre: 'Filosofía Y Pens. Contemporáneo', creditos: 3 },
+      { nombre: 'Análisis Artístico y Literario', creditos: 3 },
+      { nombre: 'Pre Breginner 1', creditos: 1 },
+      { nombre: 'Comunicación 2', creditos: 5, prereq: ['Comunicación 1'] },
+      { nombre: 'Marketing y Planam. Publicitario', creditos: 4 },
+      { nombre: 'Matemática Básica', creditos: 5, prereq: ['Complementos de matemática'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 3',
+    cursos: [
+      { nombre: 'Teoría del conocimiento', creditos: 4, prereq: ['Filosofía Y Pens. Contemporáneo'] },
+      { nombre: 'Pre Breginner 2', creditos: 1, prereq: ['Pre Breginner 1'] },
+      { nombre: 'Metodología Universitaria', creditos: 3 },
+      { nombre: 'Psicología y Comportamiento', creditos: 3, prereq: ['Filosofía Y Pens. Contemporáneo'] },
+      { nombre: 'Taller de Leng. Técnicas y Narrat. Aud.', creditos: 4 },
+      { nombre: 'Comunicación 3', creditos: 5, prereq: ['Comunicación 2'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 4',
+    cursos: [
+      { nombre: 'Teoría de la Comunicación', creditos: 3, prereq: ['Teoría del conocimiento'] },
+      { nombre: 'Semiótica', creditos: 4, prereq: ['Teoría del conocimiento'] },
+      { nombre: 'Taller de Redacción', creditos: 4, prereq: ['Comunicación 3'] },
+      { nombre: 'Responsabilidad social', creditos: 2 },
+      { nombre: 'Herramientas Informáticas', creditos: 2 },
+      { nombre: 'Storytelling', creditos: 4, prereq: ['Taller de Leng. Técnicas y Narrat. Aud.'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 5',
+    cursos: [
+      { nombre: 'Taller de Big Data y Comunicación', creditos: 3, prereq: ['Matemática Básica'] },
+      { nombre: 'Taller de Insights y Aud. Digital', creditos: 3, prereq: ['Marketing y Planam. Publicitario'] },
+      { nombre: 'Creatividad y Copywrit Multimedios', creditos: 4, prereq: ['Taller de Redacción'] },
+      { nombre: 'Empleabilidad', creditos: 4, prereq: ['Desarrollo de Talento'] },
+      { nombre: 'Gestión de la Comunicación', creditos: 3 },
+      { nombre: 'Contenido en Tiempo Real', creditos: 3 },
+      { nombre: 'Dis. Y Produc. De Narrat. Audiovisual', creditos: 4, prereq: ['Storytelling'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 6',
+    cursos: [
+      { nombre: 'Taller Fotografía Publicit. Y Com.', creditos: 3, prereq: ['Dis. Y Produc. De Narrat. Audiovisual'] },
+      { nombre: 'Taller de Design Thinking Inn. En Com.', creditos: 3 },
+      { nombre: 'Leg. Y Normas en comunicaciones', creditos: 3, prereq: ['Semiótica'] },
+      { nombre: 'Proyecto Social', creditos: 1, prereq: ['Responsabilidad social'] },
+      { nombre: 'Estrat. De Publicidad Digital', creditos: 3, prereq: ['Taller de Insights y Aud. Digital'] },
+      { nombre: 'Taller de lenguaje y Tecn. De Diseño', creditos: 3 },
+      { nombre: 'Metodología de la Invest.', creditos: 3, prereq: ['Metodología Universitaria'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 7',
+    cursos: [
+      { nombre: 'Gestión de Cuentas y Negociación', creditos: 4, prereq: ['Taller de Insights y Aud. Digital'] },
+      { nombre: 'Gest. De Marketing y Redes Sociales', creditos: 3, prereq: ['Taller de Big Data y Comunicación'] },
+      { nombre: 'Taller de Diseño y Arte Publicitario', creditos: 4, prereq: ['Creatividad y Copywrit Multimedios'] },
+      { nombre: 'Planif. Estratégica de Medios', creditos: 6, prereq: ['Estrat. De Publicidad Digital'] },
+      { nombre: 'Taller de Prod. Radial Digital', creditos: 5, prereq: ['Creatividad y Copywrit Multimedios'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 8',
+    cursos: [
+      { nombre: 'Prácticas Preprofesionales', creditos: 8, prereq: ['Empleabilidad'] },
+      { nombre: 'Planeamiento Estratégico Publicitario', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
+      { nombre: 'Planif. De Medios Digitales', creditos: 4, prereq: ['Planif. Estratégica de Medios'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 9',
+    cursos: [
+      { nombre: 'Gestión Imagen y Reputación Corporativa', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
+      { nombre: 'Tesis', creditos: 8, prereq: ['Metodología de la Invest.'] },
+      { nombre: 'Tallre de Dir. Y Producción Publicitario Aud.', creditos: 6, prereq: ['Planeamiento Estratégico Publicitario'] },
+    ]
+  },
+  {
+    ciclo: 'Ciclo 10',
+    cursos: [
+      { nombre: 'Trabajo de investigación', creditos: 8 },
+      { nombre: 'Dir. Publicitaria y Gestión de Campañas', creditos: 10, prereq: ['Gestión Imagen y Reputación Corporativa'] },
+    ]
+  },
+];
 
     function renderMalla() {
       const cursoMap = new Map();
