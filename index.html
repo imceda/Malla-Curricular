@@ -55,9 +55,19 @@
     }
 
     .aprobado {
-      background-color: var(--rosa-oscuro);
-      color: white;
-    }
+  background-color: var(--rosa-oscuro);
+  color: white;
+}
+
+.cursando {
+  background-color: var(--rosa-medio);
+  font-weight: bold;
+}
+
+.convalidado {
+  background-color: var(--naranja-rosado);
+  border: 2px dashed #ec407a;
+}
 
     .bloqueado {
       background-color: #ffe0e0;
@@ -185,16 +195,22 @@ function renderMalla() {
       const cursoDiv = document.createElement('div');
       cursoDiv.className = curso.prereq ? 'curso bloqueado' : 'curso desbloqueado';
 
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.disabled = !!curso.prereq;
+      const select = document.createElement('select');
+      select.innerHTML = `
+        <option value="pendiente">Pendiente</option>
+        <option value="cursando">Cursando</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="convalidado">Convalidado</option>
+      `;
+      select.disabled = !!curso.prereq;
 
-      input.addEventListener('change', function () {
-        toggleCurso(this, curso);
+      select.addEventListener('change', function () {
+        actualizarEstadoCurso(this, curso);
+      });
       });
 
       const label = document.createElement('label');
-      label.appendChild(input);
+      label.appendChild(select);
       label.append(`${curso.nombre} (${curso.creditos} cr.)`);
 
       cursoDiv.appendChild(label);
@@ -212,13 +228,52 @@ function renderMalla() {
   window.cursoMap = cursoMap;
 }
 
-function toggleCurso(checkbox, curso) {
-  const cursoDiv = checkbox.parentElement.parentElement;
+function actualizarEstadoCurso(select, curso) {
+  const cursoDiv = select.parentElement.parentElement;
+  cursoDiv.classList.remove('aprobado', 'cursando', 'convalidado');
 
-  if (checkbox.checked) {
-    cursoDiv.classList.add('aprobado');
-    creditosAprobados += curso.creditos;
+  const valor = select.value;
+  cursoDiv.classList.add(valor);
+
+  const creditosCurso = curso.creditos;
+  let creditosPrevios = parseInt(cursoDiv.getAttribute('data-creditos-contados')) || 0;
+
+  if (valor === 'aprobado' || valor === 'convalidado') {
+    if (!creditosPrevios) {
+      creditosAprobados += creditosCurso;
+      cursoDiv.setAttribute('data-creditos-contados', creditosCurso);
+    }
   } else {
+    if (creditosPrevios) {
+      creditosAprobados -= creditosCurso;
+      cursoDiv.setAttribute('data-creditos-contados', 0);
+    }
+  }
+
+  document.getElementById('creditosAprobados').textContent = creditosAprobados;
+  document.getElementById('creditosRestantes').textContent = creditosTotales - creditosAprobados;
+
+  window.cursoMap.forEach(({ element, input, data }) => {
+    if (data.prereq && data.prereq.includes(curso.nombre)) {
+      const prereqsAprobados = data.prereq.every(p => {
+        const ref = window.cursoMap.get(p);
+        return ref && ['aprobado', 'convalidado'].includes(ref.input.value);
+      });
+      if (prereqsAprobados) {
+        element.classList.remove('bloqueado');
+        element.classList.add('desbloqueado');
+        input.disabled = false;
+      } else {
+        element.classList.add('bloqueado');
+        element.classList.remove('desbloqueado');
+        input.disabled = true;
+        input.value = 'pendiente';
+        element.classList.remove('aprobado', 'cursando', 'convalidado');
+        element.setAttribute('data-creditos-contados', 0);
+      }
+    }
+  });
+} else {
     cursoDiv.classList.remove('aprobado');
     creditosAprobados -= curso.creditos;
   }
