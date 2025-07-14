@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular – Publicidad y Branding (UPN)</title>
+  <style>
+    :root {
+      --rosa-bebe: #fce4ec;
+      --rosa-medio: #f8bbd0;
+      --rosa-oscuro: #ec407a;
+      --naranja-rosado: #f48fb1;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--rosa-bebe);
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--rosa-oscuro);
+    }
+
+    .ciclo {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .curso {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem 0;
+      border-radius: 8px;
+      background-color: var(--rosa-medio);
+      cursor: pointer;
+    }
+
+    .curso input[type="checkbox"] {
+      margin-right: 1rem;
+    }
+
+    .aprobado {
+      background-color: var(--rosa-oscuro);
+      color: white;
+    }
+
+    .bloqueado {
+      background-color: #ffe0e0;
+      color: #aaa;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .desbloqueado {
+      background-color: var(--naranja-rosado);
+    }
+
+    .resumen {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular – Publicidad y Branding</h1>
+  <h2>Universidad Privada del Norte</h2>
+
+  <div id="contenedor"></div>
+
+  <div class="resumen">
+    Créditos Totales: <span id="creditosTotales">0</span><br>
+    Créditos Aprobados: <span id="creditosAprobados">0</span><br>
+    Créditos Restantes: <span id="creditosRestantes">0</span>
+  </div>
+
+  <script>
+    // Aquí iría tu objeto "malla" y lógica de ciclos (ya incluido antes)
+    // Sigue el bloque JS que tú ya tenías pero ahora contenido dentro del archivo HTML:
+
+    let creditosTotales = 0;
+    let creditosAprobados = 0;
+
+    const contenedor = document.getElementById('contenedor');
+
+    // Inserta aquí tu array "malla" con todos los ciclos y cursos (omitido por longitud)
+    // ...
+
+    function renderMalla() {
+      const cursoMap = new Map();
+
+      malla.forEach(ciclo => {
+        const cicloDiv = document.createElement('div');
+        cicloDiv.className = 'ciclo';
+        const titulo = document.createElement('h3');
+        titulo.textContent = ciclo.ciclo;
+        cicloDiv.appendChild(titulo);
+
+        ciclo.cursos.forEach(curso => {
+          creditosTotales += curso.creditos;
+
+          const cursoDiv = document.createElement('div');
+          cursoDiv.className = curso.prereq ? 'curso bloqueado' : 'curso desbloqueado';
+
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.disabled = !!curso.prereq;
+
+          input.addEventListener('change', function () {
+            toggleCurso(this, curso);
+          });
+
+          const label = document.createElement('label');
+          label.appendChild(input);
+          label.append(`${curso.nombre} (${curso.creditos} cr.)`);
+
+          cursoDiv.appendChild(label);
+          cicloDiv.appendChild(cursoDiv);
+
+          cursoMap.set(curso.nombre, { element: cursoDiv, input, data: curso });
+        });
+
+        contenedor.appendChild(cicloDiv);
+      });
+
+      document.getElementById('creditosTotales').textContent = creditosTotales;
+      document.getElementById('creditosRestantes').textContent = creditosTotales;
+
+      window.cursoMap = cursoMap;
+    }
+
+    function toggleCurso(checkbox, curso) {
+      const cursoDiv = checkbox.parentElement.parentElement;
+
+      if (checkbox.checked) {
+        cursoDiv.classList.add('aprobado');
+        creditosAprobados += curso.creditos;
+      } else {
+        cursoDiv.classList.remove('aprobado');
+        creditosAprobados -= curso.creditos;
+      }
+
+      document.getElementById('creditosAprobados').textContent = creditosAprobados;
+      document.getElementById('creditosRestantes').textContent = creditosTotales - creditosAprobados;
+
+      window.cursoMap.forEach(({ element, input, data }) => {
+        if (data.prereq && data.prereq.includes(curso.nombre)) {
+          const prereqsAprobados = data.prereq.every(p => {
+            const ref = window.cursoMap.get(p);
+            return ref && ref.input.checked;
+          });
+          if (prereqsAprobados) {
+            element.classList.remove('bloqueado');
+            element.classList.add('desbloqueado');
+            input.disabled = false;
+          } else {
+            element.classList.add('bloqueado');
+            element.classList.remove('desbloqueado');
+            input.disabled = true;
+            input.checked = false;
+            element.classList.remove('aprobado');
+          }
+        }
+      });
+    }
+
+    renderMalla();
+  </script>
+</body>
+</html>
