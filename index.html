@@ -194,6 +194,9 @@ function renderMalla() {
 
       const cursoDiv = document.createElement('div');
       cursoDiv.className = curso.prereq ? 'curso bloqueado' : 'curso desbloqueado';
+      if (curso.prereq) {
+        cursoDiv.title = `Pre-requisito: ${curso.prereq.join(', ')}`;
+      }
 
       const select = document.createElement('select');
       select.innerHTML = `
@@ -203,8 +206,14 @@ function renderMalla() {
         <option value="convalidado">Convalidado</option>
       `;
       select.disabled = !!curso.prereq;
+      const estadoGuardado = localStorage.getItem(`estado-${curso.nombre}`);
+      if (estadoGuardado) {
+        select.value = estadoGuardado;
+        setTimeout(() => actualizarEstadoCurso(select, curso), 0);
+      }
 
       select.addEventListener('change', function () {
+        localStorage.setItem(`estado-${curso.nombre}`, this.value);
         actualizarEstadoCurso(this, curso);
       });
       });
