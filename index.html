@@ -24,11 +24,16 @@
       color: var(--rosa-oscuro);
     }
 
+    #contenedor {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
     .ciclo {
       background: white;
       border-radius: 12px;
       padding: 1rem;
-      margin-bottom: 2rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
@@ -66,7 +71,7 @@
     .resumen {
       text-align: center;
       font-weight: bold;
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -83,197 +88,164 @@
   </div>
 
   <script>
-    // Aquí iría tu objeto "malla" y lógica de ciclos (ya incluido antes)
-    // Sigue el bloque JS que tú ya tenías pero ahora contenido dentro del archivo HTML:
-
-    let creditosTotales = 0;
-    let creditosAprobados = 0;
-
-    const contenedor = document.getElementById('contenedor');
-
     const malla = [
-  {
-    ciclo: 'Ciclo 1',
-    cursos: [
-      { nombre: 'Complementos de matemática', creditos: 5 },
-      { nombre: 'Desarrollo de Talento', creditos: 2 },
-      { nombre: 'Comunicac. Y Estudios sociales', creditos: 2 },
-      { nombre: 'Ciudadanía Global', creditos: 2 },
-      { nombre: 'Comunicación 1', creditos: 5 },
-      { nombre: 'Tll. De Com. Y Convergencia Digital', creditos: 4 },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 2',
-    cursos: [
-      { nombre: 'Filosofía Y Pens. Contemporáneo', creditos: 3 },
-      { nombre: 'Análisis Artístico y Literario', creditos: 3 },
-      { nombre: 'Pre Breginner 1', creditos: 1 },
-      { nombre: 'Comunicación 2', creditos: 5, prereq: ['Comunicación 1'] },
-      { nombre: 'Marketing y Planam. Publicitario', creditos: 4 },
-      { nombre: 'Matemática Básica', creditos: 5, prereq: ['Complementos de matemática'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 3',
-    cursos: [
-      { nombre: 'Teoría del conocimiento', creditos: 4, prereq: ['Filosofía Y Pens. Contemporáneo'] },
-      { nombre: 'Pre Breginner 2', creditos: 1, prereq: ['Pre Breginner 1'] },
-      { nombre: 'Metodología Universitaria', creditos: 3 },
-      { nombre: 'Psicología y Comportamiento', creditos: 3, prereq: ['Filosofía Y Pens. Contemporáneo'] },
-      { nombre: 'Taller de Leng. Técnicas y Narrat. Aud.', creditos: 4 },
-      { nombre: 'Comunicación 3', creditos: 5, prereq: ['Comunicación 2'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 4',
-    cursos: [
-      { nombre: 'Teoría de la Comunicación', creditos: 3, prereq: ['Teoría del conocimiento'] },
-      { nombre: 'Semiótica', creditos: 4, prereq: ['Teoría del conocimiento'] },
-      { nombre: 'Taller de Redacción', creditos: 4, prereq: ['Comunicación 3'] },
-      { nombre: 'Responsabilidad social', creditos: 2 },
-      { nombre: 'Herramientas Informáticas', creditos: 2 },
-      { nombre: 'Storytelling', creditos: 4, prereq: ['Taller de Leng. Técnicas y Narrat. Aud.'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 5',
-    cursos: [
-      { nombre: 'Taller de Big Data y Comunicación', creditos: 3, prereq: ['Matemática Básica'] },
-      { nombre: 'Taller de Insights y Aud. Digital', creditos: 3, prereq: ['Marketing y Planam. Publicitario'] },
-      { nombre: 'Creatividad y Copywrit Multimedios', creditos: 4, prereq: ['Taller de Redacción'] },
-      { nombre: 'Empleabilidad', creditos: 4, prereq: ['Desarrollo de Talento'] },
-      { nombre: 'Gestión de la Comunicación', creditos: 3 },
-      { nombre: 'Contenido en Tiempo Real', creditos: 3 },
-      { nombre: 'Dis. Y Produc. De Narrat. Audiovisual', creditos: 4, prereq: ['Storytelling'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 6',
-    cursos: [
-      { nombre: 'Taller Fotografía Publicit. Y Com.', creditos: 3, prereq: ['Dis. Y Produc. De Narrat. Audiovisual'] },
-      { nombre: 'Taller de Design Thinking Inn. En Com.', creditos: 3 },
-      { nombre: 'Leg. Y Normas en comunicaciones', creditos: 3, prereq: ['Semiótica'] },
-      { nombre: 'Proyecto Social', creditos: 1, prereq: ['Responsabilidad social'] },
-      { nombre: 'Estrat. De Publicidad Digital', creditos: 3, prereq: ['Taller de Insights y Aud. Digital'] },
-      { nombre: 'Taller de lenguaje y Tecn. De Diseño', creditos: 3 },
-      { nombre: 'Metodología de la Invest.', creditos: 3, prereq: ['Metodología Universitaria'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 7',
-    cursos: [
-      { nombre: 'Gestión de Cuentas y Negociación', creditos: 4, prereq: ['Taller de Insights y Aud. Digital'] },
-      { nombre: 'Gest. De Marketing y Redes Sociales', creditos: 3, prereq: ['Taller de Big Data y Comunicación'] },
-      { nombre: 'Taller de Diseño y Arte Publicitario', creditos: 4, prereq: ['Creatividad y Copywrit Multimedios'] },
-      { nombre: 'Planif. Estratégica de Medios', creditos: 6, prereq: ['Estrat. De Publicidad Digital'] },
-      { nombre: 'Taller de Prod. Radial Digital', creditos: 5, prereq: ['Creatividad y Copywrit Multimedios'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 8',
-    cursos: [
-      { nombre: 'Prácticas Preprofesionales', creditos: 8, prereq: ['Empleabilidad'] },
-      { nombre: 'Planeamiento Estratégico Publicitario', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
-      { nombre: 'Planif. De Medios Digitales', creditos: 4, prereq: ['Planif. Estratégica de Medios'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 9',
-    cursos: [
-      { nombre: 'Gestión Imagen y Reputación Corporativa', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
-      { nombre: 'Tesis', creditos: 8, prereq: ['Metodología de la Invest.'] },
-      { nombre: 'Tallre de Dir. Y Producción Publicitario Aud.', creditos: 6, prereq: ['Planeamiento Estratégico Publicitario'] },
-    ]
-  },
-  {
-    ciclo: 'Ciclo 10',
-    cursos: [
-      { nombre: 'Trabajo de investigación', creditos: 8 },
-      { nombre: 'Dir. Publicitaria y Gestión de Campañas', creditos: 10, prereq: ['Gestión Imagen y Reputación Corporativa'] },
-    ]
-  },
+  { ciclo: 'Ciclo 1', cursos: [
+    { nombre: 'Complementos de matemática', creditos: 5 },
+    { nombre: 'Desarrollo de Talento', creditos: 2 },
+    { nombre: 'Comunicac. Y Estudios sociales', creditos: 2 },
+    { nombre: 'Ciudadanía Global', creditos: 2 },
+    { nombre: 'Comunicación 1', creditos: 5 },
+    { nombre: 'Tll. De Com. Y Convergencia Digital', creditos: 4 },
+  ]},
+  { ciclo: 'Ciclo 2', cursos: [
+    { nombre: 'Filosofía Y Pens. Contemporáneo', creditos: 3 },
+    { nombre: 'Análisis Artístico y Literario', creditos: 3 },
+    { nombre: 'Pre Breginner 1', creditos: 1 },
+    { nombre: 'Comunicación 2', creditos: 5, prereq: ['Comunicación 1'] },
+    { nombre: 'Marketing y Planam. Publicitario', creditos: 4 },
+    { nombre: 'Matemática Básica', creditos: 5, prereq: ['Complementos de matemática'] },
+  ]},
+  { ciclo: 'Ciclo 3', cursos: [
+    { nombre: 'Teoría del conocimiento', creditos: 4, prereq: ['Filosofía Y Pens. Contemporáneo'] },
+    { nombre: 'Pre Breginner 2', creditos: 1, prereq: ['Pre Breginner 1'] },
+    { nombre: 'Metodología Universitaria', creditos: 3 },
+    { nombre: 'Psicología y Comportamiento', creditos: 3, prereq: ['Filosofía Y Pens. Contemporáneo'] },
+    { nombre: 'Taller de Leng. Técnicas y Narrat. Aud.', creditos: 4 },
+    { nombre: 'Comunicación 3', creditos: 5, prereq: ['Comunicación 2'] },
+  ]},
+  { ciclo: 'Ciclo 4', cursos: [
+    { nombre: 'Teoría de la Comunicación', creditos: 3, prereq: ['Teoría del conocimiento'] },
+    { nombre: 'Semiótica', creditos: 4, prereq: ['Teoría del conocimiento'] },
+    { nombre: 'Taller de Redacción', creditos: 4, prereq: ['Comunicación 3'] },
+    { nombre: 'Responsabilidad social', creditos: 2 },
+    { nombre: 'Herramientas Informáticas', creditos: 2 },
+    { nombre: 'Storytelling', creditos: 4, prereq: ['Taller de Leng. Técnicas y Narrat. Aud.'] },
+  ]},
+  { ciclo: 'Ciclo 5', cursos: [
+    { nombre: 'Taller de Big Data y Comunicación', creditos: 3, prereq: ['Matemática Básica'] },
+    { nombre: 'Taller de Insights y Aud. Digital', creditos: 3, prereq: ['Marketing y Planam. Publicitario'] },
+    { nombre: 'Creatividad y Copywrit Multimedios', creditos: 4, prereq: ['Taller de Redacción'] },
+    { nombre: 'Empleabilidad', creditos: 4, prereq: ['Desarrollo de Talento'] },
+    { nombre: 'Gestión de la Comunicación', creditos: 3 },
+    { nombre: 'Contenido en Tiempo Real', creditos: 3 },
+    { nombre: 'Dis. Y Produc. De Narrat. Audiovisual', creditos: 4, prereq: ['Storytelling'] },
+  ]},
+  { ciclo: 'Ciclo 6', cursos: [
+    { nombre: 'Taller Fotografía Publicit. Y Com.', creditos: 3, prereq: ['Dis. Y Produc. De Narrat. Audiovisual'] },
+    { nombre: 'Taller de Design Thinking Inn. En Com.', creditos: 3 },
+    { nombre: 'Leg. Y Normas en comunicaciones', creditos: 3, prereq: ['Semiótica'] },
+    { nombre: 'Proyecto Social', creditos: 1, prereq: ['Responsabilidad social'] },
+    { nombre: 'Estrat. De Publicidad Digital', creditos: 3, prereq: ['Taller de Insights y Aud. Digital'] },
+    { nombre: 'Taller de lenguaje y Tecn. De Diseño', creditos: 3 },
+    { nombre: 'Metodología de la Invest.', creditos: 3, prereq: ['Metodología Universitaria'] },
+  ]},
+  { ciclo: 'Ciclo 7', cursos: [
+    { nombre: 'Gestión de Cuentas y Negociación', creditos: 4, prereq: ['Taller de Insights y Aud. Digital'] },
+    { nombre: 'Gest. De Marketing y Redes Sociales', creditos: 3, prereq: ['Taller de Big Data y Comunicación'] },
+    { nombre: 'Taller de Diseño y Arte Publicitario', creditos: 4, prereq: ['Creatividad y Copywrit Multimedios'] },
+    { nombre: 'Planif. Estratégica de Medios', creditos: 6, prereq: ['Estrat. De Publicidad Digital'] },
+    { nombre: 'Taller de Prod. Radial Digital', creditos: 5, prereq: ['Creatividad y Copywrit Multimedios'] },
+  ]},
+  { ciclo: 'Ciclo 8', cursos: [
+    { nombre: 'Prácticas Preprofesionales', creditos: 8, prereq: ['Empleabilidad'] },
+    { nombre: 'Planeamiento Estratégico Publicitario', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
+    { nombre: 'Planif. De Medios Digitales', creditos: 4, prereq: ['Planif. Estratégica de Medios'] },
+  ]},
+  { ciclo: 'Ciclo 9', cursos: [
+    { nombre: 'Gestión Imagen y Reputación Corporativa', creditos: 7, prereq: ['Gestión de Cuentas y Negociación'] },
+    { nombre: 'Tesis', creditos: 8, prereq: ['Metodología de la Invest.'] },
+    { nombre: 'Tallre de Dir. Y Producción Publicitario Aud.', creditos: 6, prereq: ['Planeamiento Estratégico Publicitario'] },
+  ]},
+  { ciclo: 'Ciclo 10', cursos: [
+    { nombre: 'Trabajo de investigación', creditos: 8 },
+    { nombre: 'Dir. Publicitaria y Gestión de Campañas', creditos: 10, prereq: ['Gestión Imagen y Reputación Corporativa'] },
+  ]},
 ];
 
-    function renderMalla() {
-      const cursoMap = new Map();
+let creditosTotales = 0;
+let creditosAprobados = 0;
 
-      malla.forEach(ciclo => {
-        const cicloDiv = document.createElement('div');
-        cicloDiv.className = 'ciclo';
-        const titulo = document.createElement('h3');
-        titulo.textContent = ciclo.ciclo;
-        cicloDiv.appendChild(titulo);
+const contenedor = document.getElementById('contenedor');
 
-        ciclo.cursos.forEach(curso => {
-          creditosTotales += curso.creditos;
+function renderMalla() {
+  const cursoMap = new Map();
 
-          const cursoDiv = document.createElement('div');
-          cursoDiv.className = curso.prereq ? 'curso bloqueado' : 'curso desbloqueado';
+  malla.forEach(ciclo => {
+    const cicloDiv = document.createElement('div');
+    cicloDiv.className = 'ciclo';
+    const titulo = document.createElement('h3');
+    titulo.textContent = ciclo.ciclo;
+    cicloDiv.appendChild(titulo);
 
-          const input = document.createElement('input');
-          input.type = 'checkbox';
-          input.disabled = !!curso.prereq;
+    ciclo.cursos.forEach(curso => {
+      creditosTotales += curso.creditos;
 
-          input.addEventListener('change', function () {
-            toggleCurso(this, curso);
-          });
+      const cursoDiv = document.createElement('div');
+      cursoDiv.className = curso.prereq ? 'curso bloqueado' : 'curso desbloqueado';
 
-          const label = document.createElement('label');
-          label.appendChild(input);
-          label.append(`${curso.nombre} (${curso.creditos} cr.)`);
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.disabled = !!curso.prereq;
 
-          cursoDiv.appendChild(label);
-          cicloDiv.appendChild(cursoDiv);
-
-          cursoMap.set(curso.nombre, { element: cursoDiv, input, data: curso });
-        });
-
-        contenedor.appendChild(cicloDiv);
+      input.addEventListener('change', function () {
+        toggleCurso(this, curso);
       });
 
-      document.getElementById('creditosTotales').textContent = creditosTotales;
-      document.getElementById('creditosRestantes').textContent = creditosTotales;
+      const label = document.createElement('label');
+      label.appendChild(input);
+      label.append(`${curso.nombre} (${curso.creditos} cr.)`);
 
-      window.cursoMap = cursoMap;
-    }
+      cursoDiv.appendChild(label);
+      cicloDiv.appendChild(cursoDiv);
 
-    function toggleCurso(checkbox, curso) {
-      const cursoDiv = checkbox.parentElement.parentElement;
+      cursoMap.set(curso.nombre, { element: cursoDiv, input, data: curso });
+    });
 
-      if (checkbox.checked) {
-        cursoDiv.classList.add('aprobado');
-        creditosAprobados += curso.creditos;
+    contenedor.appendChild(cicloDiv);
+  });
+
+  document.getElementById('creditosTotales').textContent = creditosTotales;
+  document.getElementById('creditosRestantes').textContent = creditosTotales;
+
+  window.cursoMap = cursoMap;
+}
+
+function toggleCurso(checkbox, curso) {
+  const cursoDiv = checkbox.parentElement.parentElement;
+
+  if (checkbox.checked) {
+    cursoDiv.classList.add('aprobado');
+    creditosAprobados += curso.creditos;
+  } else {
+    cursoDiv.classList.remove('aprobado');
+    creditosAprobados -= curso.creditos;
+  }
+
+  document.getElementById('creditosAprobados').textContent = creditosAprobados;
+  document.getElementById('creditosRestantes').textContent = creditosTotales - creditosAprobados;
+
+  window.cursoMap.forEach(({ element, input, data }) => {
+    if (data.prereq && data.prereq.includes(curso.nombre)) {
+      const prereqsAprobados = data.prereq.every(p => {
+        const ref = window.cursoMap.get(p);
+        return ref && ref.input.checked;
+      });
+      if (prereqsAprobados) {
+        element.classList.remove('bloqueado');
+        element.classList.add('desbloqueado');
+        input.disabled = false;
       } else {
-        cursoDiv.classList.remove('aprobado');
-        creditosAprobados -= curso.creditos;
+        element.classList.add('bloqueado');
+        element.classList.remove('desbloqueado');
+        input.disabled = true;
+        input.checked = false;
+        element.classList.remove('aprobado');
       }
-
-      document.getElementById('creditosAprobados').textContent = creditosAprobados;
-      document.getElementById('creditosRestantes').textContent = creditosTotales - creditosAprobados;
-
-      window.cursoMap.forEach(({ element, input, data }) => {
-        if (data.prereq && data.prereq.includes(curso.nombre)) {
-          const prereqsAprobados = data.prereq.every(p => {
-            const ref = window.cursoMap.get(p);
-            return ref && ref.input.checked;
-          });
-          if (prereqsAprobados) {
-            element.classList.remove('bloqueado');
-            element.classList.add('desbloqueado');
-            input.disabled = false;
-          } else {
-            element.classList.add('bloqueado');
-            element.classList.remove('desbloqueado');
-            input.disabled = true;
-            input.checked = false;
-            element.classList.remove('aprobado');
-          }
-        }
-      });
     }
+  });
+}
 
-    renderMalla();
+renderMalla();
   </script>
 </body>
 </html>
